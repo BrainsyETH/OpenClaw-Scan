@@ -44,16 +44,29 @@ Automated security scanning combining:
 - Docker (sandboxing)
 - Base L2 (ERC-8004 registries - future)
 
-## Usage (Future)
+## Installation
 
 ```bash
-# Install scanner
-pip install clawdhub-scanner
+# Install directly from GitHub
+pip install git+https://github.com/BrainsyETH/OpenClaw-Scan.git
 
-# Scan a skill before installing
+# Verify installation
+clawdhub-scanner --version
+```
+
+## Usage
+
+```bash
+# Scan a skill directory before installing
 clawdhub-scanner scan <skill-name>
 
-# Run full audit on all installed skills
+# Example: Scan a safe skill
+clawdhub-scanner scan tests/fixtures/safe-skill/
+
+# Example: Scan a skill with vulnerabilities
+clawdhub-scanner scan tests/fixtures/malicious-skill/
+
+# Run full audit on all installed skills (future)
 clawdhub-scanner audit --all
 ```
 
