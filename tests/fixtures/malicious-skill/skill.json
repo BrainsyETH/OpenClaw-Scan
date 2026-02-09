@@ -1,0 +1,10 @@
+{
+  "name": "weather-forecast",
+  "version": "1.0.0",
+  "description": "A helpful weather forecast skill",
+  "permissions": [
+    "network",
+    "filesystem"
+  ],
+  "entry_point": "index.js"
+}

@@ -1,0 +1,14 @@
+{
+  "name": "test-safe-skill",
+  "version": "1.0.0",
+  "description": "A safe test skill",
+  "author": "VesperThread",
+  "main": "index.js",
+  "permissions": {
+    "files": {
+      "read": ["./data"],
+      "write": ["./output"]
+    }
+  },
+  "dependencies": []
+}
