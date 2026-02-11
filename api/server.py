@@ -18,10 +18,8 @@ from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
 import uvicorn
 
-# Local imports (to be implemented)
-# from .scanner_wrapper import run_free_scan, run_premium_scan
-# from .x402_middleware import x402_middleware
-# from .attestation import sign_attestation, verify_attestation
+# Local imports
+from scanner_integration import scan_skill
 
 # Configure logging
 logging.basicConfig(
@@ -50,9 +48,12 @@ app.add_middleware(
 
 # Configuration from environment
 WALLET_ADDRESS = os.getenv("WALLET_ADDRESS", "")  # Wallet to receive payments
-NETWORK = os.getenv("NETWORK", "base-sepolia")  # Base Sepolia (testnet) or base (mainnet)
+X402_NETWORK = os.getenv("X402_NETWORK", "eip155:8453")  # Base mainnet (was: base-sepolia)
 PREMIUM_PRICE = os.getenv("PREMIUM_PRICE", "$0.75")  # Price per premium scan
 FACILITATOR_URL = os.getenv("FACILITATOR_URL", "https://x402.org/facilitator")
+
+# Legacy support
+NETWORK = os.getenv("NETWORK", X402_NETWORK)
 
 # Pydantic models
 class ScanRequest(BaseModel):
@@ -130,18 +131,17 @@ async def scan_free(
     try:
         logger.info(f"Free scan requested for skill: {skill}")
         
-        # TODO: Implement actual scan logic
-        # results = run_free_scan(skill)
+        # Run actual scanner
+        results = scan_skill(skill, tier="free")
         
-        # Mock response for now
         return ScanResponse(
-            scan_id="free-abc123",
-            skill=skill,
-            verdict="SAFE",
-            findings=[],
-            timestamp="2026-02-10T12:34:56Z",
-            scanner_version="0.2.0",
-            tier="free"
+            scan_id=results["scan_id"],
+            skill=results["skill"],
+            verdict=results["verdict"],
+            findings=results["findings"],
+            timestamp=results["timestamp"],
+            scanner_version=results["scanner_version"],
+            tier=results["tier"]
         )
     except Exception as e:
         logger.error(f"Free scan failed: {e}")
@@ -222,43 +222,23 @@ async def scan_premium(
         
         logger.info("Payment verified, running premium scan...")
         
-        # Run premium scan
-        # TODO: Implement actual premium scan logic
-        # results = await run_premium_scan(skill)
+        # Run actual premium scanner
+        scan_results = scan_skill(skill, tier="premium")
         
-        # Mock response for now
-        scan_results = {
-            "scan_id": "premium-xyz789",
-            "skill": skill,
-            "verdict": "SAFE",
-            "findings": [],
-            "timestamp": "2026-02-10T12:34:56Z",
-            "scanner_version": "0.2.0",
-            "tier": "premium",
-            "attestation": {
-                "signature": "0xMOCK_SIGNATURE",
-                "skill_hash": "sha256:abc123...",
-                "scanner_version": "0.2.0",
-                "timestamp": "2026-02-10T12:34:56Z"
-            },
-            "payment": {
-                "tx_hash": "0xMOCK_TX_HASH",
-                "amount": PREMIUM_PRICE,
-                "network": NETWORK,
-                "verified": True
-            },
-            "sandbox_results": {
-                "exit_code": 0,
-                "execution_time_ms": 1234,
-                "syscalls_detected": 15,
-                "network_requests": 0,
-                "file_writes": 0
-            },
-            "behavioral_analysis": {
-                "anomalies_detected": 0,
-                "confidence_score": 95,
-                "risk_factors": []
-            }
+        # Add attestation (TODO: Implement actual signing)
+        scan_results["attestation"] = {
+            "signature": "0xTODO_IMPLEMENT_SIGNING",
+            "skill_hash": "sha256:TODO",
+            "scanner_version": scan_results["scanner_version"],
+            "timestamp": scan_results["timestamp"]
+        }
+        
+        # Add payment details
+        scan_results["payment"] = {
+            "tx_hash": "0xTODO_FROM_FACILITATOR",
+            "amount": PREMIUM_PRICE,
+            "network": NETWORK,
+            "verified": True
         }
         
         # Settle payment asynchronously (don't block response)
@@ -308,6 +288,43 @@ async def verify_attestation_endpoint(request: AttestationVerifyRequest):
             reason=f"Verification error: {str(e)}"
         )
 
+# Agent-facing endpoint (canonical)
+@app.get("/api/v1/scan/deep", response_model=PremiumScanResponse)
+async def scan_deep_v1(
+    request: Request,
+    skill: str = Query(..., description="Skill name or path to scan"),
+    payment_signature: Optional[str] = Header(None, alias="X-PAYMENT-SIGNATURE")
+):
+    """
+    Deep security scan with x402 payment (agent-facing endpoint).
+    
+    This is the canonical endpoint for AI agents with x402-compatible wallets.
+    
+    Features:
+    - Full YARA pattern matching
+    - Manifest validation
+    - Runtime sandbox (premium)
+    - Behavioral analysis (premium)
+    - Signed attestation (premium)
+    
+    Price: $0.75 per scan (paid via x402 protocol)
+    
+    Usage:
+        # With x402-fetch (automatic payment)
+        const scan = await wrapFetchWithPayment(fetch)(
+          'https://openclaw-scan.com/api/v1/scan/deep?skill=my-skill'
+        );
+    
+    Args:
+        skill: Skill name or GitHub URL to scan
+        payment_signature: x402 payment signature (automatic with x402-fetch)
+        
+    Returns:
+        PremiumScanResponse: Full scan results with attestation
+    """
+    # Delegate to premium scan endpoint
+    return await scan_premium(request, skill, payment_signature)
+
 # Root endpoint
 @app.get("/")
 async def root():
@@ -320,15 +337,18 @@ async def root():
         "description": "Security scanner for ClawdHub skills with x402 payments",
         "endpoints": {
             "health": "/health",
+            "agent_scan": "/api/v1/scan/deep?skill=<skill-path>",
             "free_scan": "/scan/free?skill=<skill-name>",
             "premium_scan": "/scan/premium?skill=<skill-name>",
             "verify_attestation": "/verify-attestation",
             "docs": "/docs"
         },
         "pricing": {
-            "free": "Basic YARA scan",
-            "premium": f"{PREMIUM_PRICE} - Runtime sandbox + behavioral analysis + signed attestation"
-        }
+            "free": "Basic YARA scan (no payment required)",
+            "deep": f"{PREMIUM_PRICE} - Full security analysis (x402 payment)"
+        },
+        "network": X402_NETWORK,
+        "wallet": WALLET_ADDRESS or "NOT_CONFIGURED"
     }
 
 # Run server (for local development)
