@@ -365,6 +365,6 @@ if __name__ == "__main__":
         "server:app",
         host="0.0.0.0",
         port=int(os.getenv("PORT", 8000)),
-        reload=True,  # Auto-reload on code changes
+        reload=False,
         log_level="info"
     )
