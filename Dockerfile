@@ -1,11 +1,9 @@
-# OpenClaw-Scan API Dockerfile
-# Supports both demo mode (free) and x402 paid mode
-
+# OpenClaw-Scan x402 API Production Dockerfile
 FROM python:3.11-slim
 
 WORKDIR /app
 
-# Install system dependencies for YARA
+# Install system dependencies
 RUN apt-get update && \
     apt-get install -y --no-install-recommends \
     gcc \
