@@ -1,0 +1,50 @@
+# FastAPI Server Dependencies for OpenClaw-Scan API
+# x402 monetization implementation
+
+# Core framework
+fastapi==0.109.0
+uvicorn[standard]==0.27.0
+pydantic==2.5.3
+
+# x402 payment protocol (using HTTP-based verification, no SDK needed)
+# x402 package not yet available on PyPI - we use direct facilitator HTTP API
+
+# HTTP client (for facilitator communication)
+httpx==0.26.0
+requests==2.31.0
+
+# Authentication & security
+python-jose[cryptography]==3.3.0  # JWT tokens for API keys
+passlib[bcrypt]==1.7.4  # Password hashing
+python-multipart==0.0.6  # Form data parsing
+
+# Database (for scan queue and attestations)
+redis==5.0.1  # Priority queue
+sqlalchemy==2.0.25  # Attestation storage (optional)
+alembic==1.13.1  # Database migrations
+
+# Cryptography (for attestation signing)
+ecdsa==0.18.0  # ECC signatures
+cryptography==42.0.1  # General crypto utilities
+
+# Docker (for sandbox execution)
+docker==7.0.0  # Docker SDK for Python
+
+# Monitoring & logging
+sentry-sdk[fastapi]==1.40.0  # Error tracking
+python-json-logger==2.0.7  # Structured logging
+
+# CORS & middleware
+fastapi-cors==0.0.6
+
+# Environment variables
+python-dotenv==1.0.0
+
+# Async utilities
+aiofiles==23.2.1  # Async file I/O
+asyncio-redis==0.16.0  # Async Redis client
+
+# Testing
+pytest==7.4.4
+pytest-asyncio==0.23.3
+httpx==0.26.0  # For testing async endpoints
