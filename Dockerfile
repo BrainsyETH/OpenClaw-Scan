@@ -32,4 +32,4 @@ ENV API_HOST=0.0.0.0
 
 EXPOSE 8402
 
-CMD python -m clawdhub_scanner.api
+CMD ["sh", "-c", "python -m uvicorn api.server:app --host 0.0.0.0 --port ${PORT:-8000}"]

@@ -5,7 +5,7 @@
     "buildCommand": "cd api && pip install -r requirements.txt && cd .. && pip install -e ."
   },
   "deploy": {
-    "startCommand": "cd api && uvicorn server:app --host 0.0.0.0 --port $PORT",
+    "startCommand": "cd /app && uvicorn api.server:app --host 0.0.0.0 --port $PORT",
     "restartPolicyType": "ON_FAILURE",
     "restartPolicyMaxRetries": 10
   }
