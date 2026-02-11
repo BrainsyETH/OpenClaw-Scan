@@ -20,6 +20,7 @@ import uvicorn
 
 # Local imports
 from scanner_integration import scan_skill
+from x402_verifier import verify_x402_payment, generate_payment_requirements
 
 # Configure logging
 logging.basicConfig(
@@ -212,13 +213,13 @@ async def scan_premium(
             )
         
         # Verify payment with facilitator
-        # TODO: Implement actual x402 payment verification
+        # Verify x402 payment
         logger.info("Payment signature received, verifying...")
-        # payment_valid = await verify_x402_payment(payment_signature, PREMIUM_PRICE)
-        payment_valid = True  # Mock for now
+        payment_result = await verify_x402_payment(payment_signature, PREMIUM_PRICE)
         
-        if not payment_valid:
-            raise HTTPException(status_code=402, detail="Payment verification failed")
+        if not payment_result["valid"]:
+            error_msg = payment_result.get("error", "Payment verification failed")
+            raise HTTPException(status_code=402, detail=error_msg)
         
         logger.info("Payment verified, running premium scan...")
         
@@ -235,9 +236,9 @@ async def scan_premium(
         
         # Add payment details
         scan_results["payment"] = {
-            "tx_hash": "0xTODO_FROM_FACILITATOR",
-            "amount": PREMIUM_PRICE,
-            "network": NETWORK,
+            "tx_hash": payment_result["tx_hash"],
+            "amount": payment_result["amount"] or PREMIUM_PRICE,
+            "network": payment_result["network"] or NETWORK,
             "verified": True
         }
         
