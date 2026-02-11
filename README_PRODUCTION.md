@@ -17,7 +17,7 @@ Security scanner for ClawdHub skills detecting supply chain attacks, credential 
 
 **Problem:** 286+ ClawdHub skills with zero security verification. Agents install blindly, creating supply chain attack surface.
 
-**Solution:** Pre-install security scanning with pay-per-scan pricing ($0.50 USDC via x402).
+**Solution:** Pre-install security scanning with pay-per-scan pricing ($0.10 USDC via x402 - 🔥 LAUNCH WEEK SPECIAL).
 
 ---
 
@@ -29,7 +29,7 @@ Security scanner for ClawdHub skills detecting supply chain attacks, credential 
 
 **Two tiers:**
 - 🆓 **Free:** Manifest validation (`/api/v1/scan/manifest`)
-- 💳 **Paid:** Full security scan (`/api/v1/scan/deep`) - **$0.50 USDC**
+- 💳 **Paid:** Full security scan (`/api/v1/scan/deep`) - **$0.10 USDC** (🔥 LAUNCH WEEK - 87% OFF)
 
 **Payment:** x402 protocol on Base mainnet (instant USDC micropayments)
 
@@ -134,7 +134,7 @@ Recommendation: Review network requests before installing
 │  2. POST skill.zip to /api/v1/scan/deep                  │
 │                          ↓                               │
 │  3. API returns 402 Payment Required                     │
-│     (payment details: $0.50 USDC to 0x...)              │
+│     (payment details: $0.10 USDC to 0x...)              │
 │                          ↓                               │
 │  4. Agent signs USDC payment on Base                     │
 │                          ↓                               │
@@ -210,13 +210,13 @@ Scanner Components:
 
 ## Pricing
 
-**Launch Special (Limited Time):**
+**🔥 LAUNCH WEEK SPECIAL (Limited Time):**
 - Manifest scan: **Free**
-- Deep scan: **$0.50 USDC**
+- Deep scan: **$0.10 USDC** (87% OFF regular $0.75 price)
 
 **Regular pricing (after launch period):**
 - Manifest scan: **Free**
-- Deep scan: **$1.00 USDC**
+- Deep scan: **$0.75 USDC**
 
 Check `/api/v1/pricing` for current rates.
 
@@ -241,7 +241,7 @@ cd openclaw-scan
 railway init
 railway variables set PAY_TO_ADDRESS=0xYOUR_WALLET
 railway variables set X402_NETWORK=eip155:8453
-railway variables set DEEP_SCAN_PRICE='$0.50'
+railway variables set DEEP_SCAN_PRICE='$0.10'
 railway up
 ```
 

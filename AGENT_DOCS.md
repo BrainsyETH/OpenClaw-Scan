@@ -3,7 +3,7 @@
 **Endpoint:** `https://openclaw-scan.com/api/v1/scan/deep`  
 **Method:** GET  
 **Payment:** x402 protocol (automatic with x402-compatible wallets)  
-**Price:** $0.75 USDC per deep scan
+**Price:** $0.10 USDC per deep scan (🔥 LAUNCH WEEK SPECIAL - 87% OFF regular $0.75 price)
 
 ---
 
