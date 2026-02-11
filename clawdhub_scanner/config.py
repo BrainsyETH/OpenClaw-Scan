@@ -18,7 +18,7 @@ BASE_MAINNET = "eip155:8453"
 TESTNET_FACILITATOR = "https://x402.org/facilitator"
 
 # Default pricing (in USD, paid as USDC)
-DEFAULT_DEEP_SCAN_PRICE = "$0.01"
+DEFAULT_DEEP_SCAN_PRICE = "$0.05"
 DEFAULT_MANIFEST_SCAN_PRICE = "$0.00"  # Free tier
 
 

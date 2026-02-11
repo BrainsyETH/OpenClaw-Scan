@@ -32,7 +32,7 @@ def paid_config():
     """Config with payment address set (x402 enabled)."""
     return X402Config(
         pay_to_address="0x1234567890abcdef1234567890abcdef12345678",
-        deep_scan_price="$0.01",
+        deep_scan_price="$0.05",
         upload_dir="/tmp/clawdhub_test_scans",
     )
 
