@@ -31,4 +31,4 @@ ENV API_HOST=0.0.0.0
 
 EXPOSE 8402
 
-CMD ["python", "-m", "clawdhub_scanner.api"]
+CMD python -m clawdhub_scanner.api
