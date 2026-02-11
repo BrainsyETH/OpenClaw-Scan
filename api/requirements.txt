@@ -6,8 +6,8 @@ fastapi==0.109.0
 uvicorn[standard]==0.27.0
 pydantic==2.5.3
 
-# x402 payment protocol
-x402==0.1.0  # Python x402 SDK (if available on PyPI)
+# x402 payment protocol (using HTTP-based verification, no SDK needed)
+# x402 package not yet available on PyPI - we use direct facilitator HTTP API
 
 # HTTP client (for facilitator communication)
 httpx==0.26.0

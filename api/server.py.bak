@@ -10,9 +10,7 @@ Premium tier ($0.75): Runtime sandbox + behavioral analysis + signed attestation
 """
 
 import os
-import json
 import logging
-import base64
 from typing import Optional
 from fastapi import FastAPI, HTTPException, Header, Query, Request
 from fastapi.responses import JSONResponse
@@ -20,7 +18,6 @@ from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
 import uvicorn
 
-from attestation_signer import sign_attestation, verify_attestation, get_public_key_hex
 # Local imports
 from scanner_integration import scan_skill
 from x402_verifier import verify_x402_payment, generate_payment_requirements
@@ -200,10 +197,7 @@ async def scan_premium(
             }
             
             # Return 402 with payment requirements in header
-            # Encode payment requirements as Base64 JSON per x402 spec
-            payment_json = json.dumps(payment_requirements)
-            payment_base64 = base64.b64encode(payment_json.encode('utf-8')).decode('utf-8')
-            
+            # TODO: Implement proper x402 PAYMENT-REQUIRED header encoding
             return JSONResponse(
                 status_code=402,
                 content={
@@ -214,7 +208,7 @@ async def scan_premium(
                     "message": "Premium scan requires payment via x402 protocol"
                 },
                 headers={
-                    "PAYMENT-REQUIRED": payment_base64
+                    "PAYMENT-REQUIRED": str(payment_requirements)  # TODO: Base64 encode
                 }
             )
         
@@ -232,8 +226,13 @@ async def scan_premium(
         # Run actual premium scanner
         scan_results = scan_skill(skill, tier="premium")
         
-        # Add real signed attestation
-        scan_results["attestation"] = sign_attestation(scan_results)
+        # Add attestation (TODO: Implement actual signing)
+        scan_results["attestation"] = {
+            "signature": "0xTODO_IMPLEMENT_SIGNING",
+            "skill_hash": "sha256:TODO",
+            "scanner_version": scan_results["scanner_version"],
+            "timestamp": scan_results["timestamp"]
+        }
         
         # Add payment details
         scan_results["payment"] = {
@@ -274,21 +273,15 @@ async def verify_attestation_endpoint(request: AttestationVerifyRequest):
     try:
         logger.info("Attestation verification requested")
         
-        # Verify the attestation signature
-        is_valid = verify_attestation(request.attestation, request.signature)
+        # TODO: Implement actual attestation verification
+        # valid = verify_attestation(request.attestation, request.signature)
         
-        if is_valid:
-            return AttestationVerifyResponse(
-                valid=True,
-                signer=get_public_key_hex(),
-                reason="Signature matches OpenClaw-Scan public key"
-            )
-        else:
-            return AttestationVerifyResponse(
-                valid=False,
-                signer=None,
-                reason="Invalid signature or tampered attestation"
-            )
+        # Mock response for now
+        return AttestationVerifyResponse(
+            valid=True,
+            signer="OpenClaw-Scan",
+            reason="Signature matches OpenClaw-Scan public key"
+        )
     except Exception as e:
         logger.error(f"Attestation verification failed: {e}")
         return AttestationVerifyResponse(
