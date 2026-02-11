@@ -3,7 +3,7 @@ builder = "DOCKERFILE"
 dockerfilePath = "Dockerfile"
 
 [deploy]
-startCommand = "python -m clawdhub_scanner.api"
+startCommand = "cd /app/api && uvicorn server:app --host 0.0.0.0 --port ${PORT:-8080}"
 healthcheckPath = "/"
 healthcheckTimeout = 100
 restartPolicyType = "ON_FAILURE"
