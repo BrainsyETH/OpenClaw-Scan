@@ -10,23 +10,28 @@ RUN apt-get update && \
     apt-get install -y --no-install-recommends \
     gcc \
     libc6-dev \
+    libyara-dev \
+    libssl-dev \
+    libffi-dev \
     && rm -rf /var/lib/apt/lists/*
 
 # Copy project files
 COPY pyproject.toml ./
-COPY clawdhub_scanner ./clawdhub_scanner
-COPY tests ./tests
 COPY README.md ./
+COPY clawdhub_scanner ./clawdhub_scanner
+COPY scanner ./scanner
+COPY tests ./tests
 
-# Install Python dependencies
-# Use 'api' extra for demo mode, 'x402' extra for paid mode
-ARG INSTALL_MODE=api
-RUN pip install --no-cache-dir -e ".[$INSTALL_MODE]"
+# Install Python dependencies with x402 support
+RUN pip install --no-cache-dir -e ".[x402]"
 
 # Create upload directory
 RUN mkdir -p /tmp/clawdhub_scans
 
-# Expose default API port
+# Railway sets PORT env var automatically
+ENV API_HOST=0.0.0.0
+ENV API_PORT=8402
+
 EXPOSE 8402
 
 # Run API server

@@ -62,7 +62,7 @@ class X402Config:
                 "MANIFEST_SCAN_PRICE", DEFAULT_MANIFEST_SCAN_PRICE
             ),
             host=os.environ.get("API_HOST", "0.0.0.0"),
-            port=int(os.environ.get("API_PORT", "8402")),
+            port=int(os.environ.get("PORT", os.environ.get("API_PORT", "8402"))),
             upload_dir=os.environ.get("UPLOAD_DIR", "/tmp/clawdhub_scans"),
         )
 
