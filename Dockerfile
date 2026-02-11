@@ -15,6 +15,7 @@ RUN apt-get update && \
 # Copy project files
 COPY pyproject.toml README.md ./
 COPY clawdhub_scanner ./clawdhub_scanner
+COPY api ./api
 
 # Install core dependencies first (guaranteed to work)
 RUN pip install --no-cache-dir -e ".[api]"
