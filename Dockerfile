@@ -1,30 +1,32 @@
-# OpenClaw-Scan API Server Dockerfile
+# OpenClaw-Scan x402 API Production Dockerfile
 FROM python:3.11-slim
 
-# Set working directory
 WORKDIR /app
 
 # Install system dependencies
-RUN apt-get update && apt-get install -y \
+RUN apt-get update && \
+    apt-get install -y --no-install-recommends \
+    gcc \
+    libc6-dev \
     git \
     && rm -rf /var/lib/apt/lists/*
 
-# Copy requirements and install dependencies
-COPY api/requirements.txt /app/api/
-RUN pip install --no-cache-dir -r /app/api/requirements.txt
+# Copy scanner package
+COPY clawdhub_scanner ./clawdhub_scanner
+COPY yara_rules ./yara_rules
 
-# Copy application code
-COPY . /app/
+# Copy API server
+COPY api ./api
 
-# Install scanner package
-RUN pip install -e .
+# Install dependencies
+COPY api/requirements.txt ./
+RUN pip install --no-cache-dir -r requirements.txt
+
+# Create upload directory
+RUN mkdir -p /tmp/clawdhub_scans
 
 # Expose port
 EXPOSE 8000
 
-# Health check
-HEALTHCHECK --interval=30s --timeout=10s --start-period=5s --retries=3 \
-    CMD python -c "import requests; requests.get('http://localhost:8000/health')"
-
-# Run server
+# Run API server
 CMD ["uvicorn", "api.server:app", "--host", "0.0.0.0", "--port", "8000"]
