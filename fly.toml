@@ -1,0 +1,47 @@
+# OpenClaw-Scan API - Fly.io Configuration
+
+app = "openclaw-scan-api"
+primary_region = "ord"  # Chicago (closest to agents)
+
+[build]
+  dockerfile = "Dockerfile"
+
+[env]
+  API_HOST = "0.0.0.0"
+  API_PORT = "8080"
+  UPLOAD_DIR = "/tmp/clawdhub_scans"
+
+# Demo mode defaults (set secrets for paid mode)
+# X402_NETWORK = "eip155:84532"  # Base Sepolia testnet
+# DEEP_SCAN_PRICE = "$0.05"
+
+# Production secrets (set via: fly secrets set KEY=value)
+# PAY_TO_ADDRESS = "<WALLET_ADDRESS>"
+# X402_NETWORK = "eip155:8453"  # Base mainnet
+# X402_FACILITATOR_URL = "https://x402.org/facilitator"
+# DEEP_SCAN_PRICE = "$0.50"
+
+[http_service]
+  internal_port = 8080
+  force_https = true
+  auto_stop_machines = true
+  auto_start_machines = true
+  min_machines_running = 0
+  processes = ["app"]
+
+[[http_service.checks]]
+  grace_period = "10s"
+  interval = "30s"
+  method = "GET"
+  timeout = "5s"
+  path = "/"
+
+[[vm]]
+  memory = "512mb"
+  cpu_kind = "shared"
+  cpus = 1
+
+[mounts]
+  source = "openclaw_scans"
+  destination = "/tmp/clawdhub_scans"
+  initial_size = "1gb"
