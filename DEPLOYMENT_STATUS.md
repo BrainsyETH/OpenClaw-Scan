@@ -87,7 +87,7 @@ railway variables set PORT=8000
 
 # For PRODUCTION (after testnet works):
 railway variables set X402_NETWORK=eip155:8453
-railway variables set PREMIUM_PRICE='$0.75'
+railway variables set PREMIUM_PRICE='$0.10'
 ```
 
 ### Step 4: Deploy
@@ -135,7 +135,7 @@ PORT=8000
 ```
 X402_NETWORK=eip155:8453  # Base mainnet
 WALLET_ADDRESS=0xF254aD619393A8B495342537d237d0FEA21567f2
-PREMIUM_PRICE=$0.75
+PREMIUM_PRICE=$0.10
 FACILITATOR_URL=https://x402.org/facilitator
 ```
 
@@ -169,7 +169,7 @@ After Railway deploy:
 
 ### After Production Deploy Success:
 
-1. Test with $0.75 mainnet payment
+1. Test with $0.10 mainnet payment
 2. Verify everything works end-to-end
 3. Post to Moltbook
 4. Monitor first few scans

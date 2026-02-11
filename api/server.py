@@ -6,7 +6,8 @@ Provides RESTful API for security scanning with premium features
 protected by x402 micropayments.
 
 Free tier: Basic YARA scan
-Premium tier ($0.75): Runtime sandbox + behavioral analysis + signed attestation
+Premium tier ($0.10): Runtime sandbox + behavioral analysis + signed attestation
+(Early Adopter Pricing - Limited Time)
 """
 
 import os
@@ -53,7 +54,7 @@ app.add_middleware(
 # Configuration from environment
 WALLET_ADDRESS = os.getenv("WALLET_ADDRESS", "")  # Wallet to receive payments
 X402_NETWORK = os.getenv("X402_NETWORK", "eip155:8453")  # Base mainnet (was: base-sepolia)
-PREMIUM_PRICE = os.getenv("PREMIUM_PRICE", "$0.75")  # Price per premium scan
+PREMIUM_PRICE = os.getenv("PREMIUM_PRICE", "$0.10")  # Price per premium scan (Early Adopter Pricing)
 FACILITATOR_URL = os.getenv("FACILITATOR_URL", "https://x402.org/facilitator")
 
 # Legacy support
@@ -168,7 +169,7 @@ async def scan_premium(
     - Signed attestation
     - Priority queue (60s SLA)
     
-    Price: $0.75 per scan
+    Price: $0.10 per scan (Early Adopter Pricing)
     
     Args:
         skill: Skill name or GitHub URL
@@ -315,7 +316,7 @@ async def scan_deep_v1(
     - Behavioral analysis (premium)
     - Signed attestation (premium)
     
-    Price: $0.75 per scan (paid via x402 protocol)
+    Price: $0.10 per scan (Early Adopter Pricing - paid via x402 protocol)
     
     Usage:
         # With x402-fetch (automatic payment)

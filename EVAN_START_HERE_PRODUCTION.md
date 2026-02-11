@@ -74,7 +74,7 @@ railway init
 # Set environment variables from .env.production
 railway variables set X402_NETWORK=eip155:8453
 railway variables set WALLET_ADDRESS=<PASTE_YOUR_ADDRESS>
-railway variables set PREMIUM_PRICE=\$0.75
+railway variables set PREMIUM_PRICE=\$0.10
 railway variables set FACILITATOR_URL=https://x402.org/facilitator
 
 # Deploy
@@ -110,7 +110,7 @@ const scan = await wrapFetchWithPayment(fetch)(
 );
 
 const results = await scan.json();
-// Payment of $0.75 USDC happens automatically
+// Payment of $0.10 USDC happens automatically
 // Agent gets scan results + signed attestation
 ```
 
@@ -128,7 +128,7 @@ First agent-to-agent security scanner with x402 payments.
 **Endpoint:**
 https://your-app.railway.app/api/v1/scan/deep
 
-**Price:** $0.75 USDC (Base network)
+**Price:** $0.10 USDC (Base network)
 
 **What it scans:**
 ✅ Credential exfiltration  
@@ -215,7 +215,7 @@ Check: `LAUNCH_CHECKLIST.md` (detailed troubleshooting)
 ## Cost
 
 **Railway:** $5/month (hobby plan)  
-**Earnings:** $0.75 per scan × number of scans
+**Earnings:** $0.10 per scan × number of scans
 
 **Break-even:** 7 scans per month
 

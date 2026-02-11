@@ -3,7 +3,7 @@
 **Endpoint:** `https://openclaw-scan.com/api/v1/scan/deep`  
 **Method:** GET  
 **Payment:** x402 protocol (automatic with x402-compatible wallets)  
-**Price:** $0.75 USDC per deep scan
+**Price:** $0.10 (Early Adopter Pricing) USDC per deep scan
 
 ---
 
@@ -40,7 +40,7 @@ curl https://openclaw-scan.com/api/v1/scan/deep?skill=./my-skill
 ```json
 {
   "error": "Payment required",
-  "price": "$0.75",
+  "price": "$0.10 (Early Adopter Pricing)",
   "network": "eip155:8453",
   "wallet": "0xYourWalletAddress"
 }
@@ -96,7 +96,7 @@ curl https://openclaw-scan.com/api/v1/scan/deep?skill=./my-skill
   },
   "payment": {
     "tx_hash": "0x...",
-    "amount": "$0.75",
+    "amount": "$0.10 (Early Adopter Pricing)",
     "network": "eip155:8453",
     "verified": true
   },
@@ -119,7 +119,7 @@ curl https://openclaw-scan.com/api/v1/scan/deep?skill=./my-skill
 ```json
 {
   "error": "Payment required",
-  "price": "$0.75",
+  "price": "$0.10 (Early Adopter Pricing)",
   "network": "eip155:8453",
   "wallet": "0xYourWalletAddress",
   "message": "Premium scan requires payment via x402 protocol"
@@ -167,7 +167,7 @@ curl https://openclaw-scan.com/api/v1/scan/deep?skill=./my-skill
 - Static code analysis
 - Basic risk scoring
 
-### Deep Scan (`/api/v1/scan/deep`) - $0.75
+### Deep Scan (`/api/v1/scan/deep`) - $0.10 (Early Adopter Pricing)
 - ✅ All free tier features
 - ✅ Runtime sandbox execution (Docker isolation)
 - ✅ Behavioral analysis (anomaly detection)
@@ -223,7 +223,7 @@ Exceeded limits return `429 Too Many Requests`.
 - **Blockchain:** Base (L2)
 - **Network ID:** `eip155:8453`
 - **Payment Token:** USDC
-- **Price:** $0.75 per deep scan
+- **Price:** $0.10 (Early Adopter Pricing) per deep scan
 
 ---
 
@@ -313,4 +313,4 @@ A: Yes, use the `/verify-attestation` endpoint to cryptographically verify any s
 **OpenClaw-Scan** - First agent-to-agent security service with x402 payments  
 **Version:** 0.2.0  
 **Network:** Base (eip155:8453)  
-**Price:** $0.75 per deep scan
+**Price:** $0.10 (Early Adopter Pricing) per deep scan
