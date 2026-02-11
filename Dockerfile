@@ -8,25 +8,27 @@ RUN apt-get update && \
     apt-get install -y --no-install-recommends \
     gcc \
     libc6-dev \
-    git \
+    libssl-dev \
+    libffi-dev \
     && rm -rf /var/lib/apt/lists/*
 
-# Copy scanner package
+# Copy project files
+COPY pyproject.toml README.md ./
 COPY clawdhub_scanner ./clawdhub_scanner
-COPY yara_rules ./yara_rules
 
-# Copy API server
-COPY api ./api
+# Install core dependencies first (guaranteed to work)
+RUN pip install --no-cache-dir -e ".[api]"
 
-# Install dependencies
-COPY api/requirements.txt ./
-RUN pip install --no-cache-dir -r requirements.txt
+# Install x402 extras separately — if it fails, API still works in demo mode
+RUN pip install --no-cache-dir "x402[fastapi,evm]>=2.0.0" || \
+    echo "[x402] x402 SDK not available — API will run in demo mode"
 
 # Create upload directory
 RUN mkdir -p /tmp/clawdhub_scans
 
-# Expose port
-EXPOSE 8000
+# Railway sets PORT env var at runtime
+ENV API_HOST=0.0.0.0
 
-# Run API server
-CMD ["sh", "-c", "uvicorn api.server:app --host 0.0.0.0 --port ${PORT:-8000}"]
+EXPOSE 8402
+
+CMD ["python", "-m", "clawdhub_scanner.api"]
