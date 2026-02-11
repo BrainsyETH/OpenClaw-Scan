@@ -25,10 +25,23 @@ dependencies = [
 ]
 
 [project.optional-dependencies]
-dev = ["pytest>=7.0", "black", "mypy"]
+api = [
+    "fastapi>=0.100.0",
+    "uvicorn[standard]>=0.20.0",
+    "python-multipart>=0.0.6",
+]
+x402 = [
+    "fastapi>=0.100.0",
+    "uvicorn[standard]>=0.20.0",
+    "python-multipart>=0.0.6",
+    "x402[fastapi,evm]>=2.0.0",
+]
+dev = ["pytest>=7.0", "pytest-asyncio>=0.21.0", "httpx>=0.24.0", "black", "mypy"]
+all = ["clawdhub-scanner[x402,dev]"]
 
 [project.scripts]
 clawdhub-scanner = "clawdhub_scanner.cli:main"
+clawdhub-api = "clawdhub_scanner.api:main"
 
 [project.urls]
 Homepage = "https://github.com/vesperthread/clawdhub-security-scanner"
