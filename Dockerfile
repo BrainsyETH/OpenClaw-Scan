@@ -29,4 +29,4 @@ RUN mkdir -p /tmp/clawdhub_scans
 EXPOSE 8000
 
 # Run API server
-CMD ["uvicorn", "api.server:app", "--host", "0.0.0.0", "--port", "8000"]
+CMD ["sh", "-c", "uvicorn api.server:app --host 0.0.0.0 --port ${PORT:-8000}"]
