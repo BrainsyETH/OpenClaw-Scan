@@ -1,0 +1,14 @@
+# OpenClaw-Scan API Dependencies
+# Install with: pip install -r requirements.txt
+
+# Core dependencies
+yara-python>=4.0.0
+
+# API server
+fastapi>=0.100.0
+uvicorn[standard]>=0.20.0
+python-multipart>=0.0.6
+
+# x402 payment protocol (optional - install for paid tier)
+# Uncomment to enable x402 monetization:
+# x402[fastapi,evm]>=2.0.0
